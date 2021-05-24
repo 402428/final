@@ -45,6 +45,29 @@ function loopHeroMovement () {
     } else if (Hero.vx > 0) {
         HeroFacing = 1
     }
+    if (Hero.tileKindAt(TileDirection.Bottom, sprites.dungeon.hazardLava0)) {
+        HeroHealth.value = 0
+    } else if (Hero.tileKindAt(TileDirection.Bottom, sprites.dungeon.hazardLava1)) {
+        HeroHealth.value = 0
+    } else if (Hero.tileKindAt(TileDirection.Bottom, sprites.dungeon.hazardWater)) {
+        if (powers[1] == 0) {
+            HeroHealth.value = 0
+        }
+    } else if (Hero.tileKindAt(TileDirection.Bottom, assets.tile`myTile0`)) {
+        HeroHealth.value = 0
+    }
+    if (HeroHealth.value <= 0) {
+        Hero.destroy()
+        Icon.destroy()
+        tiles.setTileAt(HeroSpawn, assets.tile`PlayerSpawn1`)
+        spawnPlayer()
+        scene.cameraShake(7, 1000)
+        if (info.score() > 1000) {
+            info.changeScoreBy(-1000)
+        } else {
+            info.setScore(0)
+        }
+    }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Hero.vy == 0) {
@@ -80,15 +103,15 @@ function loopSpriteOffscreen () {
             }
         }
     }
-    for (let value of tiles.getTilesByType(assets.tile`EnemySpawnT1`)) {
-        if (tiles.locationXY(value, tiles.XY.x) - Hero.x < 100 && tiles.locationXY(value, tiles.XY.x) - Hero.x > -100) {
-            if (tiles.locationXY(value, tiles.XY.y) - Hero.y < 100 && tiles.locationXY(value, tiles.XY.y) - Hero.y > -100) {
+    for (let value2 of tiles.getTilesByType(assets.tile`EnemySpawnT1`)) {
+        if (tiles.locationXY(value2, tiles.XY.x) - Hero.x < 100 && tiles.locationXY(value2, tiles.XY.x) - Hero.x > -100) {
+            if (tiles.locationXY(value2, tiles.XY.y) - Hero.y < 100 && tiles.locationXY(value2, tiles.XY.y) - Hero.y > -100) {
                 EnemyT2S = sprites.create(assets.image`EnemyT1`, SpriteKind.EnemyT2)
                 animation.attachAnimation(EnemyT2S, EnemyT2Animations[0])
                 animation.attachAnimation(EnemyT2S, EnemyT2Animations[1])
-                tiles.placeOnTile(EnemyT2S, value)
+                tiles.placeOnTile(EnemyT2S, value2)
                 EnemyT2S.y += -8
-                tiles.setTileAt(value, assets.tile`transparency16`)
+                tiles.setTileAt(value2, assets.tile`transparency16`)
                 EnemyHP = statusbars.create(20, 2, StatusBarKind.EnemyHealth)
                 EnemyHP.max = EnemyT2Stats[1]
                 EnemyHP.value = EnemyT2Stats[1]
@@ -98,15 +121,15 @@ function loopSpriteOffscreen () {
             }
         }
     }
-    for (let value of tiles.getTilesByType(assets.tile`EnemySpawnT3`)) {
-        if (tiles.locationXY(value, tiles.XY.x) - Hero.x < 100 && tiles.locationXY(value, tiles.XY.x) - Hero.x > -100) {
-            if (tiles.locationXY(value, tiles.XY.y) - Hero.y < 100 && tiles.locationXY(value, tiles.XY.y) - Hero.y > -100) {
+    for (let value3 of tiles.getTilesByType(assets.tile`EnemySpawnT3`)) {
+        if (tiles.locationXY(value3, tiles.XY.x) - Hero.x < 100 && tiles.locationXY(value3, tiles.XY.x) - Hero.x > -100) {
+            if (tiles.locationXY(value3, tiles.XY.y) - Hero.y < 100 && tiles.locationXY(value3, tiles.XY.y) - Hero.y > -100) {
                 EnemyT3S = sprites.create(assets.image`EnemyT1`, SpriteKind.EnemyT3)
                 animation.attachAnimation(EnemyT3S, EnemyT3Animations[0])
                 animation.attachAnimation(EnemyT3S, EnemyT3Animations[1])
-                tiles.placeOnTile(EnemyT3S, value)
+                tiles.placeOnTile(EnemyT3S, value3)
                 EnemyT3S.y += -8
-                tiles.setTileAt(value, assets.tile`transparency16`)
+                tiles.setTileAt(value3, assets.tile`transparency16`)
                 EnemyHP = statusbars.create(20, 2, StatusBarKind.EnemyHealth)
                 EnemyHP.max = EnemyT3Stats[1]
                 EnemyHP.value = EnemyT3Stats[1]
@@ -116,27 +139,27 @@ function loopSpriteOffscreen () {
             }
         }
     }
-    for (let value of sprites.allOfKind(SpriteKind.EnemyT1)) {
-        if (value.x - Hero.x > 200 || value.x - Hero.x < -200 || (value.y - Hero.y > 200 || value.y - Hero.y < -200)) {
-            tiles.setTileAt(tiles.locationOfSprite(value), assets.tile`EnemySpawnT0`)
-            value.destroy()
+    for (let value4 of sprites.allOfKind(SpriteKind.EnemyT1)) {
+        if (value4.x - Hero.x > 200 || value4.x - Hero.x < -200 || (value4.y - Hero.y > 200 || value4.y - Hero.y < -200)) {
+            tiles.setTileAt(tiles.locationOfSprite(value4), assets.tile`EnemySpawnT0`)
+            value4.destroy()
         }
     }
-    for (let value of sprites.allOfKind(SpriteKind.EnemyT2)) {
-        if (value.x - Hero.x > 200 || value.x - Hero.x < -200 || (value.y - Hero.y > 200 || value.y - Hero.y < -200)) {
-            tiles.setTileAt(tiles.locationOfSprite(value), assets.tile`EnemySpawnT1`)
-            value.destroy()
+    for (let value5 of sprites.allOfKind(SpriteKind.EnemyT2)) {
+        if (value5.x - Hero.x > 200 || value5.x - Hero.x < -200 || (value5.y - Hero.y > 200 || value5.y - Hero.y < -200)) {
+            tiles.setTileAt(tiles.locationOfSprite(value5), assets.tile`EnemySpawnT1`)
+            value5.destroy()
         }
     }
-    for (let value of sprites.allOfKind(SpriteKind.EnemyT3)) {
-        if (value.x - Hero.x > 200 || value.x - Hero.x < -200 || (value.y - Hero.y > 200 || value.y - Hero.y < -200)) {
-            tiles.setTileAt(tiles.locationOfSprite(value), assets.tile`EnemySpawnT3`)
-            value.destroy()
+    for (let value6 of sprites.allOfKind(SpriteKind.EnemyT3)) {
+        if (value6.x - Hero.x > 200 || value6.x - Hero.x < -200 || (value6.y - Hero.y > 200 || value6.y - Hero.y < -200)) {
+            tiles.setTileAt(tiles.locationOfSprite(value6), assets.tile`EnemySpawnT3`)
+            value6.destroy()
         }
     }
-    for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
-        if (value.x - Hero.x > 100 || value.x - Hero.x < -100) {
-            value.destroy()
+    for (let value7 of sprites.allOfKind(SpriteKind.Projectile)) {
+        if (value7.x - Hero.x > 100 || value7.x - Hero.x < -100) {
+            value7.destroy()
         }
     }
 }
@@ -180,21 +203,21 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     })
 })
 function loopEnemyControl () {
-    for (let value of sprites.allOfKind(SpriteKind.EnemyT1)) {
-        if (Hero.x - value.x < 0) {
-            animation.setAction(value, ActionKind.WalkingLeft)
-            value.vx = EnemyT1Stats[0] * -1
-        } else if (Hero.x - value.x > 0) {
-            animation.setAction(value, ActionKind.WalkingRight)
-            value.vx = EnemyT1Stats[0]
+    for (let value8 of sprites.allOfKind(SpriteKind.EnemyT1)) {
+        if (Hero.x - value8.x < 0) {
+            animation.setAction(value8, ActionKind.WalkingLeft)
+            value8.vx = EnemyT1Stats[0] * -1
+        } else if (Hero.x - value8.x > 0) {
+            animation.setAction(value8, ActionKind.WalkingRight)
+            value8.vx = EnemyT1Stats[0]
         }
-        if (Hero.overlapsWith(value)) {
+        if (Hero.overlapsWith(value8)) {
             if (HeroI == 0) {
                 HeroHealth.value += EnemyT1Stats[2] * -1
                 HeroI = 1
-                if (Hero.x - value.x < 0) {
+                if (Hero.x - value8.x < 0) {
                     Hero.vx = -100
-                } else if (Hero.x - value.x > 0) {
+                } else if (Hero.x - value8.x > 0) {
                     Hero.vx = 100
                 }
                 Hero.vy = -100
@@ -206,26 +229,27 @@ function loopEnemyControl () {
                 HeroI = 0
             })
         }
-        if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, value).value == 0) {
-            value.startEffect(effects.fountain, 500)
-            value.destroy()
+        if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, value8).value == 0) {
+            value8.startEffect(effects.fountain, 500)
+            value8.destroy()
+            info.changeScoreBy(250)
         }
     }
-    for (let value of sprites.allOfKind(SpriteKind.EnemyT2)) {
-        if (Hero.x - value.x < 0) {
-            animation.setAction(value, ActionKind.WalkingLeft)
-            value.vx = EnemyT2Stats[0] * -1
-        } else if (Hero.x - value.x > 0) {
-            animation.setAction(value, ActionKind.WalkingRight)
-            value.vx = EnemyT2Stats[0]
+    for (let value9 of sprites.allOfKind(SpriteKind.EnemyT2)) {
+        if (Hero.x - value9.x < 0) {
+            animation.setAction(value9, ActionKind.WalkingLeft)
+            value9.vx = EnemyT2Stats[0] * -1
+        } else if (Hero.x - value9.x > 0) {
+            animation.setAction(value9, ActionKind.WalkingRight)
+            value9.vx = EnemyT2Stats[0]
         }
-        if (Hero.overlapsWith(value)) {
+        if (Hero.overlapsWith(value9)) {
             if (HeroI == 0) {
                 HeroHealth.value += EnemyT2Stats[2] * -1
                 HeroI = 1
-                if (Hero.x - value.x < 0) {
+                if (Hero.x - value9.x < 0) {
                     Hero.vx = -100
-                } else if (Hero.x - value.x > 0) {
+                } else if (Hero.x - value9.x > 0) {
                     Hero.vx = 100
                 }
                 Hero.vy = -100
@@ -237,26 +261,27 @@ function loopEnemyControl () {
                 HeroI = 0
             })
         }
-        if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, value).value == 0) {
-            value.startEffect(effects.fountain, 500)
-            value.destroy()
+        if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, value9).value == 0) {
+            value9.startEffect(effects.fountain, 500)
+            value9.destroy()
+            info.changeScoreBy(100)
         }
     }
-    for (let value of sprites.allOfKind(SpriteKind.EnemyT3)) {
-        if (Hero.x - value.x < 0) {
-            animation.setAction(value, ActionKind.WalkingLeft)
-            value.vx = EnemyT3Stats[0] * -1
-        } else if (Hero.x - value.x > 0) {
-            animation.setAction(value, ActionKind.WalkingRight)
-            value.vx = EnemyT3Stats[0]
+    for (let value10 of sprites.allOfKind(SpriteKind.EnemyT3)) {
+        if (Hero.x - value10.x < 0) {
+            animation.setAction(value10, ActionKind.WalkingLeft)
+            value10.vx = EnemyT3Stats[0] * -1
+        } else if (Hero.x - value10.x > 0) {
+            animation.setAction(value10, ActionKind.WalkingRight)
+            value10.vx = EnemyT3Stats[0]
         }
-        if (Hero.overlapsWith(value)) {
+        if (Hero.overlapsWith(value10)) {
             if (HeroI == 0) {
                 HeroHealth.value += EnemyT3Stats[2] * -1
                 HeroI = 1
-                if (Hero.x - value.x < 0) {
+                if (Hero.x - value10.x < 0) {
                     Hero.vx = -100
-                } else if (Hero.x - value.x > 0) {
+                } else if (Hero.x - value10.x > 0) {
                     Hero.vx = 100
                 }
                 Hero.vy = -100
@@ -268,9 +293,10 @@ function loopEnemyControl () {
                 HeroI = 0
             })
         }
-        if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, value).value == 0) {
-            value.startEffect(effects.fountain, 500)
-            value.destroy()
+        if (statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, value10).value == 0) {
+            value10.startEffect(effects.fountain, 500)
+            value10.destroy()
+            info.changeScoreBy(500)
         }
     }
 }
@@ -283,7 +309,7 @@ function initVars () {
     HeroFacing = 1
     HeroI = 0
     HeroStats = [50, 200]
-    powers = [1, 0, 0, 0]
+    powers = [1, 1, 1, 1]
     EnemyT1Stats = [20, 75, 50]
     EnemyT2Stats = [40, 30, 25]
     EnemyT3Stats = [10, 200, 100]
@@ -293,21 +319,30 @@ function loopCollectibles () {
         powers = [1, 0, 0, 0]
         CrystalT1.destroy()
         animation.setAction(Icon, ActionKind.S1)
+        scene.cameraShake(4, 500)
+        info.changeScoreBy(600)
     } else if (Hero.overlapsWith(CrystalT2)) {
         powers = [1, 1, 0, 0]
         CrystalT2.destroy()
         animation.setAction(Icon, ActionKind.S2)
+        scene.cameraShake(4, 500)
+        info.changeScoreBy(1000)
     } else if (Hero.overlapsWith(CrystalT3)) {
         powers = [1, 1, 1, 0]
         CrystalT3.destroy()
         animation.setAction(Icon, ActionKind.S3)
+        scene.cameraShake(4, 500)
+        info.changeScoreBy(2000)
     } else if (Hero.overlapsWith(CrystalT4)) {
         powers = [1, 1, 1, 1]
         CrystalT4.destroy()
         animation.setAction(Icon, ActionKind.S4)
+        scene.cameraShake(4, 500)
+        info.changeScoreBy(5000)
     }
 }
 function initAnim () {
+    let bossAnimations: animation.Animation[] = []
     HeroAnimations[0] = animation.createAnimation(ActionKind.WalkingLeft, 100)
     HeroAnimations[0].addAnimationFrame(assets.image`HeroWalkL0`)
     HeroAnimations[0].addAnimationFrame(assets.image`HeroWalkL1`)
@@ -358,6 +393,58 @@ function initAnim () {
     IconFrames[2].addAnimationFrame(assets.image`Icon2`)
     IconFrames[3] = animation.createAnimation(ActionKind.S4, 100)
     IconFrames[3].addAnimationFrame(assets.image`Icon4`)
+    bossAnimations[0] = animation.createAnimation(ActionKind.WalkingLeft, 100)
+    IconFrames[0].addAnimationFrame(img`
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ................................................
+        ...............................f................
+        ...............................f................
+        ...............................f................
+        ..............................ff................
+        ............................fff.................
+        ............................ff..................
+        ............................f...................
+        ...................ffffffffff...................
+        ...................ffffffffff...................
+        ...................ffffffffff...................
+        ...................ffffffffff...................
+        ...................fff...ffff...................
+        ...................fff....ffff..................
+        ...................fff.....fff..................
+        ...................fff.....fff..................
+        ....................fff....ffff.................
+        ....................fff.....fff.................
+        ....................fff.....fff.................
+        ....................fff.....fff.................
+        `)
+    bossAnimations[0] = animation.createAnimation(ActionKind.WalkingRight, 100)
 }
 function loopHeroAnims () {
     if (HeroAttacking == 0) {
@@ -413,10 +500,8 @@ scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
         sprite.destroy()
     }
 })
-function initLevel () {
-    tiles.setTilemap(tilemap`level2`)
-    scene.setBackgroundColor(11)
-    for (let value of tiles.getTilesByType(assets.tile`PlayerSpawn1`)) {
+function spawnPlayer () {
+    for (let value11 of tiles.getTilesByType(assets.tile`PlayerSpawn1`)) {
         HeroSpawn = tiles.getTilesByType(assets.tile`PlayerSpawn1`)[0]
         Hero = sprites.create(assets.image`Hero`, SpriteKind.Player)
         controller.moveSprite(Hero, 50, 0)
@@ -428,8 +513,8 @@ function initLevel () {
         animation.attachAnimation(Hero, HeroAnimations[5])
         animation.attachAnimation(Hero, HeroAnimations[6])
         animation.attachAnimation(Hero, HeroAnimations[7])
-        tiles.placeOnTile(Hero, value)
-        tiles.setTileAt(value, assets.tile`transparency16`)
+        tiles.placeOnTile(Hero, value11)
+        tiles.setTileAt(value11, assets.tile`transparency16`)
         Hero.y += -8
         scene.cameraFollowSprite(Hero)
         Hero.setStayInScreen(true)
@@ -447,32 +532,37 @@ function initLevel () {
         HeroHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         HeroHealth.positionDirection(CollisionDirection.Top)
     }
-    for (let value of tiles.getTilesByType(assets.tile`CrystalT0`)) {
+}
+function initLevel () {
+    tiles.setTilemap(tilemap`level2`)
+    scene.setBackgroundColor(11)
+    spawnPlayer()
+    info.setScore(0)
+    for (let value12 of tiles.getTilesByType(assets.tile`CrystalT0`)) {
         CrystalT1 = sprites.create(assets.image`CrystalT1`, SpriteKind.Crystal)
-        tiles.placeOnTile(CrystalT1, value)
-        tiles.setTileAt(value, assets.tile`transparency16`)
+        tiles.placeOnTile(CrystalT1, value12)
+        tiles.setTileAt(value12, assets.tile`transparency16`)
     }
-    for (let value of tiles.getTilesByType(assets.tile`CrystalT1`)) {
+    for (let value13 of tiles.getTilesByType(assets.tile`CrystalT1`)) {
         CrystalT2 = sprites.create(assets.image`CrystalT2`, SpriteKind.Crystal)
-        tiles.placeOnTile(CrystalT2, value)
-        tiles.setTileAt(value, assets.tile`transparency16`)
+        tiles.placeOnTile(CrystalT2, value13)
+        tiles.setTileAt(value13, assets.tile`transparency16`)
     }
-    for (let value of tiles.getTilesByType(assets.tile`CrystalT2`)) {
+    for (let value14 of tiles.getTilesByType(assets.tile`CrystalT2`)) {
         CrystalT3 = sprites.create(assets.image`CrystalT3`, SpriteKind.Crystal)
-        tiles.placeOnTile(CrystalT3, value)
-        tiles.setTileAt(value, assets.tile`transparency16`)
+        tiles.placeOnTile(CrystalT3, value14)
+        tiles.setTileAt(value14, assets.tile`transparency16`)
     }
-    for (let value of tiles.getTilesByType(assets.tile`CrystalT4`)) {
+    for (let value15 of tiles.getTilesByType(assets.tile`CrystalT4`)) {
         CrystalT4 = sprites.create(assets.image`CrystalT4`, SpriteKind.Crystal)
-        tiles.placeOnTile(CrystalT4, value)
-        tiles.setTileAt(value, assets.tile`transparency16`)
+        tiles.placeOnTile(CrystalT4, value15)
+        tiles.setTileAt(value15, assets.tile`transparency16`)
     }
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.EnemyT1, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.EnemyHealth, otherSprite).value += HeroDamage * -1
     sprite.destroy()
 })
-let HeroSpawn: tiles.Location = null
 let IconFrames: animation.Animation[] = []
 let HeroAnimations: animation.Animation[] = []
 let CrystalT4: Sprite = null
@@ -480,7 +570,6 @@ let CrystalT3: Sprite = null
 let CrystalT2: Sprite = null
 let CrystalT1: Sprite = null
 let HeroStats: number[] = []
-let HeroHealth: StatusBarSprite = null
 let HeroI = 0
 let Fireball: Sprite = null
 let HeroAttacking = 0
@@ -495,6 +584,8 @@ let EnemyHP: StatusBarSprite = null
 let EnemyT1Animations: animation.Animation[] = []
 let EnemyT1S: Sprite = null
 let HeroDamage = 0
+let HeroSpawn: tiles.Location = null
+let HeroHealth: StatusBarSprite = null
 let HeroFacing = 0
 let canDoubleJump = 0
 let powers: number[] = []
